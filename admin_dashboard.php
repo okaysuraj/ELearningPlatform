@@ -42,7 +42,7 @@
             background: #555;
         }
         .main-content {
-            margin-left: 250px;
+            margin-left: 350px;
             padding: 20px;
             width: calc(100% - 250px);
         }
@@ -63,7 +63,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 250px;
-            padding: 40px;
+            padding: 20px;
             text-align: center;
             transition: transform 0.3s, box-shadow 0.3s;
         }

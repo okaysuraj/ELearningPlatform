@@ -1,6 +1,6 @@
 <?php
 // Database connection
-$conn = new mysqli('localhost', 'root', '', 'elearning_platform');
+$conn = new mysqli('localhost', 'root', '', 'elearning');
 
 // Check connection
 if ($conn->connect_error) {

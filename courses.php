@@ -169,7 +169,7 @@
             <div class="courses-container">
                 <?php
                 // Database connection
-                $conn = new mysqli('localhost', 'root', '', 'elearning_platform');
+                $conn = new mysqli('localhost', 'root', '', 'elearning');
                 
                 // Check connection
                 if ($conn->connect_error) {
@@ -184,7 +184,7 @@
                     // Output data for each course
                     while($row = $result->fetch_assoc()) {
                         echo "<div class='card'>
-                                <img src='course-placeholder.jpg' alt='Course Image'>
+                                
                                 <h3>" . $row["title"] . "</h3>
                                 <p>" . $row["description"] . "</p>
                               </div>";

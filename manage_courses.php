@@ -6,7 +6,7 @@ session_start();
 // }
 
 // Database connection
-$conn = new mysqli('localhost', 'root', '', 'elearning_platform');
+$conn = new mysqli('localhost', 'root', '', 'elearning');
 
 // Check connection
 if ($conn->connect_error) {
@@ -27,6 +27,8 @@ $result = $conn->query("SELECT * FROM courses");
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
         }
         .sidebar {
             height: 100vh;
@@ -59,9 +61,9 @@ $result = $conn->query("SELECT * FROM courses");
             background: #555;
         }
         .main-content {
-            margin-left: 350px;
+            margin-left: 250px;
             padding: 20px;
-            width: calc(100% - 250px);
+            width: calc(100% - 270px);
         }
         .main-content h1 {
             color: #333;
@@ -70,19 +72,47 @@ $result = $conn->query("SELECT * FROM courses");
             margin-bottom: 20px;
         }
         table {
-            width: 100%;
+            width: 90%;
             border-collapse: collapse;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         th, td {
-            padding: 10px;
+            padding: 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
         th {
-            background: #f4f4f4;
+            background: #4caf50;
+            color: white;
+            font-size: 1.1rem;
+            text-transform: uppercase;
         }
         tr:hover {
             background-color: #f1f1f1;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .actions a {
+            text-decoration: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-right: 5px;
+            transition: background 0.3s ease;
+        }
+        .actions a.edit {
+            background-color: #ffa500;
+        }
+        .actions a.edit:hover {
+            background-color: #ff8c00;
+        }
+        .actions a.delete {
+            background-color: #f44336;
+        }
+        .actions a.delete:hover {
+            background-color: #d32f2f;
         }
         .logout-btn {
             display: block;
@@ -121,7 +151,6 @@ $result = $conn->query("SELECT * FROM courses");
                     <th>ID</th>
                     <th>Title</th>
                     <th>Description</th>
-                    
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -131,10 +160,9 @@ $result = $conn->query("SELECT * FROM courses");
                         <td><?php echo $row['id']; ?></td>
                         <td><?php echo $row['title']; ?></td>
                         <td><?php echo $row['description']; ?></td>
-                        
-                        <td>
-                            <a href="edit_course.php?id=<?php echo $row['id']; ?>">Edit</a>
-                            <a href="delete_course.php?id=<?php echo $row['id']; ?>" onclick="return confirm('Are you sure?')">Delete</a>
+                        <td class="actions">
+                            <a href="edit_course.php?id=<?php echo $row['id']; ?>" class="edit">Edit</a>
+                            <a href="delete_course.php?id=<?php echo $row['id']; ?>" class="delete" onclick="return confirm('Are you sure?')">Delete</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>

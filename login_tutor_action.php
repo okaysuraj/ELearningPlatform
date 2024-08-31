@@ -1,9 +1,11 @@
 <?php
+session_start();
+
 // Database connection
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "elearning_platform";
+$dbname = "elearning";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -16,21 +18,30 @@ if ($conn->connect_error) {
 $user = $_POST['username'];
 $pass = $_POST['password'];
 
-// Retrieve tutor data from database
-$sql = "SELECT * FROM tutors WHERE username='$user'";
-$result = $conn->query($sql);
+// Use prepared statements to prevent SQL injection
+$stmt = $conn->prepare("SELECT id, password FROM tutors WHERE username = ?");
+$stmt->bind_param("s", $user);
+$stmt->execute();
+$stmt->store_result();
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    if($pass === $row['password']) {
+if ($stmt->num_rows > 0) {
+    $stmt->bind_result($tutor_id, $stored_password);
+    $stmt->fetch();
+
+    // Check if the entered password matches the stored password
+    if ($pass === $stored_password) {
+        // Start session and redirect
+        $_SESSION['tutor_logged_in'] = true;
+        $_SESSION['tutor_id'] = $tutor_id;
         header("Location: tutor_dashboard.php");
-        // Start tutor session here
+        exit();
     } else {
-        echo "Invalid email or password.";
+        echo "Invalid username or password.";
     }
 } else {
-    echo "No tutor found with this email.";
+    echo "No tutor found with this username.";
 }
 
+$stmt->close();
 $conn->close();
 ?>

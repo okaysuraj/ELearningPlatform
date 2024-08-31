@@ -1,9 +1,11 @@
 <?php
+session_start();
+
 // Database connection
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "elearning_platform";
+$dbname = "elearning";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -13,28 +15,33 @@ if ($conn->connect_error) {
 }
 
 // Retrieve form data
-$user = $_POST['username'];
+$user = $_POST['username']; // Use null coalescing operator to handle undefined indexes
 $pass = $_POST['password'];
 
+
 // Use prepared statements to retrieve user data from the database
-$stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+$stmt = $conn->prepare("SELECT id, password FROM users WHERE username = ?");
 $stmt->bind_param("s", $user);
 $stmt->execute();
-$result = $stmt->get_result();
+$stmt->store_result();
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    if ($pass === $row['password']) {
+if ($stmt->num_rows > 0) {
+    $stmt->bind_result($user_id, $stored_password);
+    $stmt->fetch();
+    if ($pass === $stored_password) {
+        // Start session and redirect
+        $_SESSION['user_logged_in'] = true;
+        $_SESSION['user_id'] = $user_id;
         header("Location: user_dashboard.php");
-        // Start user session here
+        exit();
     } else {
-        echo "Invalid password.";
+        echo "Invalid username or password.";
     }
 } else {
     echo "No user found with this username.";
 }
 
+
 $stmt->close();
 $conn->close();
 ?>
-
